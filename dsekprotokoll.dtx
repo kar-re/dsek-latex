@@ -1,0 +1,541 @@
+%\iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{dsekcommands}
+\usepackage{booktabs}
+\usepackage{fancyvrb}
+\usepackage{rcsinfo}
+\usepackage{url}
+\usepackage{ifpdf}
+
+\ifpdf
+  \RequirePackage[pdfpagemode=UseOutlines,
+                  bookmarks=true,
+                  bookmarksnumbered,
+                  bookmarksopen=true,
+                  pdfauthor={Magnus Bäck},
+                  pdftitle={Dokumentklassen dsekprotokoll},
+                  colorlinks=true,
+                  linkcolor=black,
+                  urlcolor=black]{hyperref}[2001/04/13]
+\fi
+
+\rcsInfo $Id: dsekprotokoll.dtx,v 1.7 2003/02/25 02:10:16 magnus Exp $
+\def\rcsIsoDateHelper#1/#2/#3{#1--#2--#3}
+\def\rcsIsoDate{\expandafter\rcsIsoDateHelper\rcsInfoDate}
+
+\def\UrlFont{\slshape}
+
+\EnableCrossrefs
+
+\newcommand{\orgname}{Datatekniksektionen inom TLTH\xspace}
+\newcommand{\TtH}{%
+  T\kern-.25em\raise-.4ex\hbox{\sc\uppercasesc t}\kern-.10emH\xspace}
+\newcommand{\pdfLaTeX}{pdf\LaTeX\xspace}
+\newcommand{\pdfTeX}{pdf\TeX\xspace}
+
+\VerbatimFootnotes
+
+\begin{document}
+  \DocInput{dsekprotokoll.dtx}
+\end{document}
+%</driver>
+%\fi
+% \title{Dokumentklassen \textsf{dsekprotokoll}}
+% \author{Magnus Bäck \texttt{<magnus@dsek.lth.se>}}
+% \date{\rcsIsoDate, v\rcsInfoRevision}
+%
+% \maketitle
+%
+% \tableofcontents
+%
+% \section{Introduktion}
+%
+%    Dokumentklassen \textsf{dsekprotokoll} används av \orgname för
+%    att skriva mötesprotokoll.
+%
+%    Klassen grundar sig på paketet med samma namn som tidigare
+%    använts för samma uppgifter. Skillnaden är dock mer än ett
+%    namnbyte; makrona har rensats upp och en dum konstruktion för att
+%    ordna själva layouten har skrivits om från grunden.
+%
+%    En likhet med tidigare implementationer är att samtliga makron är
+%    anpassade för användning med \TtH för konvertering till HTML
+%    (eller snarare 
+%    \texttt{maz}-format\footnote{\url{http://www.dsek.lth.se/dwww/program/maz.html}}) med programmet \texttt{protokoll2maz}. Mer om hur detta går till 
+%    beskrivs i \emph{Dokumentproduktion på 
+%    D-sektionen}\footnote{\url{http://www.dsek.lth.se/sektionen/propm/dokument/dsekdokument.pdf}}.
+%    
+%    Stödet för produktion av PDF-dokument med \pdfLaTeX har utökats
+%    jämfört med \textsf{dsekcommon} på så sätt att punkterna i
+%    protokollet läggs till som bokmärken för att förenkla
+%    navigeringen samt att ett extra makro kan användas för att
+%    referera till paragrafer, i PDF-fallet även med hyperlänkar.
+%
+% \section{Användarhandledning}
+%
+% \subsection{Det mest basala}
+%
+%    Det viktigaste när man skriver protokoll är omgivningen
+%    \DescribeEnv{protokoll}|protokoll| samt makrot
+%    \DescribeMacro{\paragraf}|\paragraf|. Den förstnämnda begränsar
+%    var |\paragraf| får användas och börjar lämpligen direkt efter
+%    |\maketitle| och närvarolistan och slutar precis före
+%    underskrifterna.
+%
+%    |\paragraf| tar två obligatoriska argument, ett för numret på
+%    paragrafen och ett för dess titel. Numret ska inte innehålla
+%    något paragraftecken (\S). Efter detta är det bara att fylla på
+%    med text, listor, tabeller och vad man nu vill ha i sitt
+%    protokoll tills det är dags för nästa |\paragraf|.
+%
+%    Ett tredje och valfritt argument accepteras av |\paragraf|. Detta
+%    används för att komma runt en bugg/designfel som finns i
+%    implementationen av |\paragraf|. När paragraftiteln består av
+%    fler rader än texten som hör till paragrafen måste detta
+%    överskott anges för att inte titeln ska köra ihop sig med nästa
+%    paragraf. Notera att det är antalet \emph{överskjutande} rader
+%    som anges, inte det totala antalet rader. Exempel:
+%\begin{verbatim}
+%\paragraf[2]{5}{Långtidsutredningens förslag till definition av
+%  full sysselsättning}
+%\end{verbatim}
+%    Tyvärr hjälper inte detta knep för att komma runt problemet när
+%    en sådan paragraf hamnar längst ned på sidan och titeln spiller
+%    ut över sidfoten. Då krävs det att man manuellt infogar
+%    |\clearpage| innan paragrafen för att flytta hela paragrafen till
+%    nästföljande sida.
+%
+%    |\maketitle| och |\title| vill man f.ö. inte glömma bort eftersom
+%    det är de som sätter rubriken på dokumentet. De används precis
+%    som vanligt. Använd inte |\section| el~dyl i stället för
+%    |\maketitle|.
+%
+% \subsection{Närvarolistan}
+%
+%    Eftersom man knappast behöver skriva något protokoll om ingen
+%    varit på mötet, kan man räkna med att varje protokoll behöver en
+%    närvarolista. Stöd för sådana finns med omgivningen
+%    \DescribeEnv{narvaro}|narvaro| och makrot
+%    \DescribeMacro{\person}|\person|. Varje närvarande person får var
+%    sin |\person|-rad, där |\person| tar två obligatoriska argument
+%    för namn och ev. post samt begränsningar i närvaron.
+%
+%    Man kan även ange ett valfritt argument som är
+%    användaridentiteten på EFD för personen. Då kommer personens namn
+%    att bli en hyperlänk till dennes personakt i dokumentets PDF- och
+%    HTML-versioner. Se dokumentationen till |\personakt| i
+%    \textsf{dsekcommands} för detaljer.
+%\begin{verbatim}
+%\begin{narvaro}
+%  \person{Bengt Öste}{Talman}
+%  \person[d82bb]{Börje Börjesson}{Sekreterare, ej \S1}
+%  \person[d82rp]{Råsa Pantern}{Endast \S13}
+%  \person{Fnaj Kvatt}{}
+%\end{narvaro}
+%\end{verbatim}
+%
+% \subsection{Kolumnbredder}
+%
+%    Det hade varit förenat med mycket besvär att ordna så att
+%    bredden på kolumnerna för paragrafnummer och -titel skulle
+%    anpassa sig på ett optimalt sätt, så detta får man ställa in
+%    själv om man inte är nöjd. Det är man förmodligen inte om
+%    protokollet har paragrafnummer som 25.10 eller titlar som är
+%    väldigt långa eller innehåller långa ord som måste avstavas på
+%    ett fult sätt. 
+%
+%    Sådana justeringar görs med makrot
+%    \DescribeMacro{\columnwidths}|\columnwidths|. Två argument
+%    accepteras, för bredden på första resp. andra kolumnen. Exempel:
+%\begin{verbatim}
+%\columnwidths{18mm}{45mm}
+%\end{verbatim}
+%    Bredden på den sista kolumnen (den för själva paragraftexten)
+%    beräknas automatiskt utifrån bredden på de två första och
+%    sidbredden.
+%
+% \subsection{Hänvisningar till andra paragrafer}
+%
+%    Ibland kan det vara önskvärt att hänvisa till andra paragrafer i
+%    protokollet, t.ex. att under dagordningspunkten ha texten
+%    ''Dagordningen godkändes med tillägget \S4 Glass är
+%    gott''. Självklart kan man skriva detta manuellt, men det finns
+%    flera skäl till varför det bör automatiseras. Dels riskerar det
+%    inte att bli fel om man ändrar titeln på paragrafen, och dels är
+%    det önskvärt att hänvisningen blir en hyperlänk.
+%
+%    Detta löses med makrot \DescribeMacro{\parref}|\parref| som tar
+%    numret på en paragraf som argument och resulterar i en hänvisning
+%    till paragrafen som en hyperlänk. Detta illustreras nog enklast
+%    med ett exempel:
+%
+%    \medskip
+%    \begin{minipage}{0.45\textwidth}
+%\begin{verbatim}
+%\parref{4}
+%\end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%\S4 Glass är gott
+%    \end{minipage}
+%    \medskip
+%
+%    Om man inte vill ha med titeln på paragrafen i referensen kan man
+%    använda \DescribeMacro{\parref*}|\parref*| som utelämnar den och
+%    alltså bara har med \S{} och paragrafens nummer (poängen med
+%    detta är att hänvisningen fortfarande blir en hyperlänk i
+%    PDF-versionen av dokumentet).
+%
+% \appendix
+% \section{Komplett och kommenterad källkod}
+%
+% \subsection{Prolog}
+%
+%    Börja med att tala om att vi behöver \LaTeXe{} och eventuellt vilken
+%    version vi också behöver. Skriv också ut filnamnet och versionen när
+%    filer som använder \textsf{dsekprotokoll} kompileras.
+%    \begin{macrocode}
+%<*class>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesClass{dsekprotokoll}
+\typeout{This is dsekprotokoll.cls, version 2002-08-16}
+%    \end{macrocode}
+%    Eftersom \textsf{dsekprotokoll} baserar sig på \textsf{article} så
+%    laddar vi den klassen först.
+%    \begin{macrocode}
+\LoadClass[a4paper,11pt]{article}
+%    \end{macrocode}
+%    Inkludera nu de paket som behövs; knappast några
+%    överraskningar. \textsf{calc} används för att lättare beräkna
+%    fram en del mått, \textsf{ifthen} tillhandahåller
+%    |\ifthenelse| som gör det trevligare att konstruera
+%    if-satser, \textsf{lastpage} skapar etiketten LastPage som gör
+%    det lätt att infoga antalet sidor i dokumentet,
+%    \textsf{longtable} ger tabeller som kan brytas över flera sidor
+%    (behövs för närvarolistan), \textsf{array} lägger till några
+%    extra kolumntyper (|@{}| används i närvarolistan),
+%    \textsf{parskip} löser några av de avståndsproblem som finns om man
+%    sätter |\parindent| till 0 och |\parskip| till ett positivt
+%    värde. \textsf{dsekcommon} är basen för D-sektionens \LaTeX-paket
+%    och -klasser med grundläggande makron och inställningar för
+%    marginaler etc.
+%    \begin{macrocode}
+\RequirePackage{calc}
+\RequirePackage{ifthen}
+\RequirePackage{lastpage}
+\RequirePackage{longtable}
+\RequirePackage{array}
+\RequirePackage{nameref}
+\RequirePackage{parskip}
+\RequirePackage[pdfbookmarks]{dsekcommon}
+%    \end{macrocode}
+%
+% \subsection{Optioner}
+%
+%    De två optioner som finns, ''protokoll'' och ''stadgar'', används för
+%    att tala om huruvida det är ett protokoll eller sektionsstadgarna man
+%    skriver. Detta påverkar djupet på bokmärkena samt huruvida
+%    listomgivningen ska heta ''protokoll'' eller ''stadgeavsnitt''.
+%    \begin{macrocode}
+\newcommand{\paragraf@tocdepth}{}
+\newcommand{\protokoll@envname}{}
+\DeclareOption{protokoll}{%
+  \renewcommand{\paragraf@tocdepth}{1}
+  \renewcommand{\protokoll@envname}{protokoll}}
+\DeclareOption{stadgar}{%
+  \renewcommand{\paragraf@tocdepth}{2}
+  \renewcommand{\protokoll@envname}{stadgeavsnitt}}
+%    \end{macrocode}
+%    Kör optionen 'protokoll' som standard och dra därefter igenom övriga
+%    optioner.
+%    \begin{macrocode}
+\ExecuteOptions{protokoll}
+\ProcessOptions
+%    \end{macrocode}
+% \subsection{Sidhuvud och sidfötter}
+%
+%    Välj ''fancy'' som stil för sidhuvud och sidfötter. Utan detta
+%    blir allt sättande av sidhuvud och sidfötter meningslöst.
+%    \begin{macrocode}
+\pagestyle{fancy}
+%    \end{macrocode}
+%    Töm sidhuvudet och se till att det enda som finns i sidfoten är
+%    ett centerad sidnummer med antalet sidor inom parentes. Se
+%    dokumentationen till \textsf{dsekcommands} för en beskrivning av
+%    |\nohyperpageref|.
+%    \begin{macrocode}
+\lhead{}
+\chead{}
+\rhead{}
+\lfoot{}
+\cfoot{\thepage{} (\nohyperpageref{LastPage})}
+\rfoot{}
+%    \end{macrocode}
+%
+% \subsection{Kolumnbredder}
+%
+%    För att kontrollera hur breda kolumnerna i en
+%    \DescribeEnv{protokoll}\texttt{protokoll}-omgivning är finns
+%    makrot |\columnwidths| där användaren kan ange bredden för
+%    den första och andra kolumnen (den tredje kommer att få den plats
+%    som blir över).
+%
+%    Definiera de två längderna |\numbercollength| och
+%    |\subjectcollength|.
+%    \begin{macrocode}
+\newlength{\numbercollength}
+\newlength{\subjectcollength}
+%    \end{macrocode}
+% \begin{macro}{\columnwidths}
+%    Makrot för att sätta kolumnbredderna är inte märkvärdigare än två
+%    anrop till |\setlength| för respektive längd. Att det ändå
+%    görs på detta sätt beror på att det är mer lättbegripligt och
+%    dessutom abstraherar bort en eventuell beräkning av någon längd
+%    som skulle kunna vara beroende av dessa två.
+%    \begin{macrocode}
+\newcommand{\columnwidths}[2]{
+  \setlength{\numbercollength}{#1}
+  \setlength{\subjectcollength}{#2}}
+%    \end{macrocode}
+% \end{macro}
+%    Välj ett par lämpliga defaultvärden för kolumnbredderna.
+%    \begin{macrocode}
+\columnwidths{11mm}{38mm}
+%    \end{macrocode}
+%
+% \subsection{Paragraflistan}
+%
+% \begin{environment}{protokoll}
+% \begin{environment}{stadgeavsnitt}
+%    Omgivningen \texttt{protokoll} innefattar all text i protokollet,
+%    alltså från OFMÖ till OFMA. Om man ger optionen ''stadgar'' kommer
+%    omgivningen i stället att heta ''stadgeavsnitt''.
+%
+%    |\paragraf@extraskip| behövs av |\paragraf| när paragrafrubriken
+%    tar större vertikal plats än den tillhörande texten. Hör ihop
+%    med det valfria argumentet till nämnda makro.
+%    \begin{macrocode}
+\newlength{\paragraf@extraskip}
+%    \end{macrocode}
+%    Såsom så många andra omgivningar använder den i grund och botten
+%    omgivningen \texttt{list} tillsammans med en omdefinition av
+%    |\makelabel| och några ändrade längder.
+%    \begin{macrocode}
+\newenvironment{\protokoll@envname}{%
+  \setlength{\paragraf@extraskip}{0mm}
+  \begin{list}{}{%
+%    \end{macrocode}
+%    Skapa det tomma makrot |\parnumber| så att vi senare ska
+%    kunna använda |\renewcommand| på det. |\parnumber| innehåller det
+%    aktuella paragrafnumret som skickas som det första argumentet
+%    till |\paragraf|. Hade det varit enklare att skicka flera
+%    argument till |\item| och |\makelabel| så hade den vägen förstås
+%    varit en bättre lösning.
+%    \begin{macrocode}
+      \newcommand{\parnumber}{}%
+%    \end{macrocode}
+%    Sätt |\labelwidth| till summan av de kolumnbredder som
+%    tidigare angivits med |\columnwidths| och |\leftmargin|
+%    till denna längd tillsammans med avståndet mellan etiketten och
+%    texten, |\labelsep|.
+%    \begin{macrocode}
+      \setlength{\labelwidth}{\numbercollength + \subjectcollength}%
+      \setlength{\leftmargin}{\labelwidth + \labelsep}%
+%    \end{macrocode}
+%    Omdefiniera |\makelabel| till att skapa en rejäl etikett
+%    bestående av två |\parbox|ar med paragrafen och namnet på
+%    den. För att detta ska fungera optimalt krävs en del andra trick,
+%    se nedan.
+%    \begin{macrocode}
+      \renewcommand{\makelabel}[1]{%
+%    \end{macrocode}
+%    Om det är ett PDF-dokument som skapas så lägg till ett bokmärke
+%    för den här punkten. Argumenten till |\pdfbookmark| är nivån
+%    för bokmärket, texten som ska visas samt en intern (unik) etikett.
+%    \begin{macrocode}
+        \ifpdf
+          \pdfbookmark[\paragraf@tocdepth]{%
+            \S\parnumber{} ##1}{par:\parnumber}%
+          \hypertarget{par:\parnumber}{}%
+        \fi
+%    \end{macrocode}
+%    För att vi ska kunna referera till namnet på paragrafen måste vi
+%    modifiera |\@currentlabelname| för att det ska plockas upp
+%    av (den av \textsf{nameref} omdefinierade) |\label|. 
+%    |\phantomsection| kommer från \textsf{hyperref} och är nödvändigt
+%    för att |\label| ska hänvisa rätt.
+%    \begin{macrocode}
+        \ifpdf
+          \phantomsection
+        \fi
+        \renewcommand{\@currentlabelname}{##1}%
+        \label{par:\parnumber}%
+%    \end{macrocode}
+%    Det är här det blir riktigt fult. Att det är så här äckligt beror på
+%    att \LaTeX{} måste luras att tro att ärendekolumnen bara är en rad
+%    hög även när den inte är det. Koden är, förutom de dubbla
+%    |\parbox|arna, tagen direkt från exemplet på sidan~65 av
+%    \emph{The \LaTeX{} Companion}\footnote{Goosens \emph{et al},
+%    \emph{The \LaTeX{} Companion}. Addison-Wesley, 1994.}, där det
+%    står följande:
+%    \begin{quote}
+%      ''The material gets typeset inside a paragraph box of the
+%      correct width |\labelwidth|, which is then top aligned and
+%      left adjusted into a box that is itself placed inside a box
+%      with a height of 1~ex and no depth. In this way, \LaTeX{} does
+%      not realize that the material extends below the first line.''
+%    \end{quote}
+%
+%    Nackdelen med den här metoden är att höjden av ärendekolumnen
+%    inte får vara större än textkolumnen, för då kommer den
+%    förstnämnda att krocka med nästa paragrafrubrik.
+%
+%    Förekomsten av |\hspace{0pt}| kan verka meningslös, men den
+%    ser bara till att första ordet i stycken kan avstavas, vilket
+%    normalt inte tillåts. |\raggedright| slår som vanligt av
+%    marginaljusteringen, vilket är klokt med sådana här smala
+%    kolumner. Textkolumnen längst till höger är dock fortfarande
+%    marginaljusterad.
+%    \begin{macrocode}
+        \raisebox{0pt}[1ex][0pt]{%
+          \makebox[\labelwidth][l]{%
+            \parbox[t]{\numbercollength}{\S\parnumber}%
+            \parbox[t]{\subjectcollength}{%
+              \raggedright\hspace{0pt}##1}}}\hfill}%
+%    \end{macrocode}
+% \begin{macro}{\paragraf}
+%    Definiera |\paragraf| till att sätta |\parnumber| och
+%    kalla på |\item|. Det bästa hade ju varit att omdefiniera
+%    |\item|, men det verkade onödigt krångligt.
+%    \begin{macrocode}
+      \newcommand{\paragraf}[3][0]{%
+        \vspace{\the\paragraf@extraskip}%
+        \setlength{\paragraf@extraskip}{##1\baselineskip}%
+        \renewcommand{\parnumber}{##2}%
+        \item[##3]}}}{%
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+    \vspace{\the\paragraf@extraskip}%
+  \end{list}}
+%    \end{macrocode}
+% \end{environment}
+% \end{environment}
+% \begin{macro}{\maketitle}
+%    Omdefiniera |\maketitle| till att enbart lägga in en
+%    |\section*|. Detta må kännas meningslöst, men ger extra
+%    flexibilitet om man t.ex. skulle vilja bygga upp rubriken av
+%    något annat än |\@title|. Exempelvis tycker en del att det är av
+%    godo att ha rubriker i versaler, och i så fall skulle man kunna
+%    använda |\MakeUppercase| i den här definitionen. Att skriva
+%    rubriken versalt i |\title| är en jättedum idé.
+%    \begin{macrocode}
+\renewcommand{\maketitle}{%
+  \section*{\@title}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{Övriga makron och omgivningar}
+%
+% \begin{environment}{narvaro}
+%    Omgivningen \texttt{narvaro} sätter upp en närvarolista. Detta
+%    görs genom en tabell (\texttt{longtable} för att tillåta
+%    sidbrytningar) med tre kolumnar. I den första är alla celler
+%    tomma utom för den första raden, där texten ''Närvaro:'' sätts i
+%    fetstil. För att göra det enkelt läggs den texten i makrot
+%    |\narvaro@caption|, som töms efter första raden.
+%    \begin{macrocode}
+\newenvironment{narvaro}{%
+  \newcommand{\narvaro@caption}{\textbf{Närvaro:}}%
+%    \end{macrocode}
+% \begin{macro}{\person}
+%    En person läggs in med |\person|, vilken tar två obligatoriska
+%    argument som läggs in i kolumn två resp. tre i tabellen. Det
+%    första och valfria argumentet är en användaridentitet som,
+%    om närvarande, skickas till |\peronakt| för eventuell
+%    hyperlänkning.
+%    \begin{macrocode}
+  \newcommand{\person}[3][]{%
+    \narvaro@caption & 
+    \ifthenelse{\equal{##1}{}}{##2}{\personakt{##2}{##1}} & ##3 \\
+    \renewcommand{\narvaro@caption}{}}%
+%    \end{macrocode}
+% \end{macro}
+%    Det sista som händer när man går in i omgivningen är att tabellen
+%    öppnas, och när man går ur omgivningen stängs den åter.
+%    \begin{macrocode}
+  \begin{longtable}[l]{@{}lll}}{%
+  \end{longtable}}
+%    \end{macrocode}
+% \end{environment}
+%
+%    |\beslot| och |\Beslot| är två mycket basala hjälpmakron som 
+%    helt enkelt infogar texten ''beslöt'' resp ''Beslöt'' i
+%    fetstil. Dessa finns kvar mest av hysteriska skäl.
+%    \begin{macrocode}
+\newcommand{\beslot}{\textbf{beslöt}\xspacedsek}
+\newcommand{\Beslot}{\textbf{Beslöt}\xspacedsek}
+%    \end{macrocode}
+%
+% \begin{macro}{\parref}
+%    Ytterligare en hårighet. Det |\parref| gör är ju att infoga
+%    en referens till den paragraf vars nummer ges som argument, med
+%    eller utan namnet på paragrafen beroende på om man använder
+%    |\parref| eller |\parref*|. Om det är ett PDF-dokument som görs
+%    så infogas en hyperlänk, i annat fall enbart texten.
+%
+%    |\parref| bygger på att |\paragraf| skapar etiketter
+%    och hyperlänkmål med namnen ''par:\emph{xx}'', där \emph{xx} är
+%    paragrafnamnet.
+%
+%    Det som gör det hela lite komplicerat är hur |\@ifstar|
+%    fungerar. Dels måste anropet till det makrot ligga sist i det
+%    omgivande makrot:
+%\begin{verbatim}
+%\newcommand{\makro}{\@ifstar{yes\blaha}{no\blaha}} % Ok
+%\newcommand{\makro}{\@ifstar{yes}{no}\blaha}       % Fel
+%\end{verbatim}
+%    Det andra problemet är \TeX{}s hantering av argument. Det är inte
+%    så enkelt som att köra på som vanligt, eftersom |#1| då kommer
+%    att innehålla stjärnan, om den är med. Det man får göra är att
+%    inte låta det yttre makrot använda några argument utan skapa två
+%    interna makron som omedelbart anropas. Dessa tar däremot
+%    argument, och kommer då att plocka den eller de som står närmast
+%    på tur i indataströmmen. Makron i \TeX{} (skapade direkt med
+%    t.ex. |\def| eller |\newcommand|) konsumerar bara de symboler som
+%    de blivit åtsagda att konsumera och lämnar kvar resten i
+%    tokenströmmen.
+%
+%    En bugg, om än liten, är att \textsf{hyperref} själv ser till att
+%    alla |\nameref| automatiskt blir hyperlänkar, varför |\parref|
+%    resulterar i ''dubbellänkar''. Detta märks om man i Adobe Acrobat
+%    håller nere musknappen på själva paragraftiteln, då enbart den
+%    inverteras i stället för hela hela hyperlänken (inkl.
+%    paragrafnumret).
+%    \begin{macrocode}
+\newcommand{\parref@star}[1]{%
+  \ifpdf
+    \hyperlink{par:#1}{\S#1}%
+  \else
+    \S#1%
+  \fi}%
+\newcommand{\parref@nostar}[1]{%
+  \ifpdf
+    \hyperlink{par:#1}{\S#1~\nameref{par:#1}}%
+  \else
+    \S#1~\nameref{par:#1}%
+  \fi}%
+\newcommand{\parref}{%
+  \@ifstar{\parref@star}{\parref@nostar}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    \begin{macrocode}
+%</class>
+%    \end{macrocode}
+%
+% \Finale

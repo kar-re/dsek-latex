@@ -1,0 +1,244 @@
+%\iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{xspace}
+\usepackage{texnames}
+\usepackage{dsekcommands}
+\usepackage{ifthen}
+\usepackage{url}
+\usepackage{mflogo}
+\usepackage{rcsinfo}
+\usepackage{ifpdf}
+
+\ifpdf
+  \RequirePackage[pdfpagemode=UseOutlines,
+                  bookmarks=true,
+                  bookmarksnumbered,
+                  bookmarksopen=true,
+                  pdfauthor={Magnus Bäck},
+                  pdftitle={Paketet dsekmarginkern},
+                  colorlinks=true,
+                  linkcolor=black,
+                  urlcolor=black]{hyperref}[2001/04/13]
+\fi
+
+\rcsInfo $Id: dsekmarginkern.dtx,v 1.4 2012-02-19 19:27:14 glyph Exp $
+\def\rcsIsoDateHelper#1/#2/#3{#1--#2--#3}
+\def\rcsIsoDate{\expandafter\rcsIsoDateHelper\rcsInfoDate}
+
+\EnableCrossrefs
+
+\def\UrlFont{\sl}
+
+\newcommand{\orgname}{Datatekniksektionen inom TLTH}
+\newcommand{\TtH}{%
+  T\kern-.25em\raise-.4ex\hbox{\sc \uppercasesc t}\kern-.10emH\xspace}
+\newcommand{\pdfLaTeX}{pdf\LaTeX\xspace}
+\newcommand{\pdfTeX}{pdf\TeX\xspace}
+
+\begin{document}
+  \DocInput{dsekmarginkern.dtx}
+\end{document}
+%</driver>
+%\fi
+% \title{Paketet \textsf{dsekmarginkern}}
+% \author{Magnus Bäck \texttt{<magnus@dsek.lth.se>}}
+% \date{\rcsIsoDate, v\rcsInfoRevision}
+%
+% \maketitle
+%
+% \tableofcontents
+%
+% \section{Introduktion}
+%
+%    Det här dokumentet beskriver hur paketet \textsf{dsekmarginkern}
+%    använder finesser i \pdfTeX för att ordna marginaljustering av
+%    tecken i PDF-dokument.
+%
+% \section{Bakgrund}
+%
+%    Under en lång tid fanns det i princip två alternativ om man ville göra
+%    ett PDF-dokument av sin \TeX-kreation; ghostscript\footnote{Med
+%    undermåligt resultat eftersom PostScript-fonter inte hanterades på ett
+%    snyggt sätt förrän i version 6.0 och \MF-fonter ser urusla ut i Acrobat
+%    Reader.} eller det kommersiella Adobe Acrobat Distiller.
+%
+%    På senare tid har dvipdfm tillkommit, men framför allt
+%    \pdfTeX/\pdfLaTeX som utvecklats av den vid universitetet i Brno
+%    studerande Hàn Th\'ê Thành. \pdfTeX är intressant eftersom den inte
+%    konverterar DVI till PDF utan går direkt från \texttt{.tex} till
+%    \texttt{.pdf}, och dessutom implementerar en del nya finesser. Till
+%    finesserna hör mikrotypografi som presenterades i Hermann Zapfs
+%    \emph{hz}-program; marginalkerning samt teckenbreddsjustering. 
+
+%    Marginalkerning innebär att tecken justeras ut något i marginalen
+%    (vänster och/eller höger) för att ge en virtuellt rakare
+%    marginal. Ögat uppfattar inte att t.ex. ett bindstreck eller ett komma
+%    befinner sig lite utanför marginalen, men däremot upptäcker det att
+%    bokstaven som föregår bindestrecket inte når ut i marginalen, vilket
+%    skapar en synbart ojämn marginal. Genom att låta sista tecknet på
+%    raden sticka ut med uppåt 70\,\% (beroende på vad det är för tecken)
+%    luras ögat att tro att marginalen blir rakare. I \pdfTeX finns stöd
+%    för två nivåer av marginaljustering. Den första nivån applicerar
+%    kerningen när brytningen av ett stycke är färdig. Detta kommer att
+%    skapa något större utrymme mellan orden, men resultatet kommer
+%    frånsett detta inte att skilja sig från vanliga \TeX. Den andra nivån
+%    tar hänsyn till marginaljusteringen innan styckebrytningen, och
+%    resultaten är en på sina håll något snyggare brytning. För att
+%    D-sektionens dokument ska vara identiska oavsett vilket program de
+%    skapats med används enbart nivå ett.
+%
+%    Teckenbreddsjustering går ut på att enskilda teckens bredd varieras
+%    för att skapa så jämna ordavstånd som möjligt och därmed undvika
+%    ''vita floder'' som rinner genom en textspalt. Även här finns två
+%    nivåer för att välja huruvida styckebrytningen ska påverkas. Den här
+%    finessen används inte alls.
+%
+% \appendix
+% \section{Komplett och kommenterad källkod}
+%
+% \subsection{Prolog}
+%
+%    All väsentlig kod i det här paketet är taget direkt från det som Hàn
+%    Th\'ê Thành själv använder och som han postade till mailinglistan för
+%    \pdfTeX den 6~mars 2001\footnote{Se
+%    \url{http://www.tug.org/pipermail/pdftex/2001-March/007831.html}.}. 
+%    Jag har bara indenterat om, lagt till lite paketkod samt flyttat några
+%    definitioner hit från en annan fil.
+%
+%    Börja med att tala om att vi behöver \LaTeXe{} och eventuellt vilken
+%    version vi också behöver. Skriv också ut filnamnet och versionen när
+%    filer som använder \textsf{dsekcommands} kompileras.
+%    \begin{macrocode}
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dsekmarginkern}
+\typeout{This is dsekmarginkern.sty, version 2001-07-31}
+%    \end{macrocode}
+%    Definiera några temporära räknare som behövs för makrona i paketet.
+%    \begin{macrocode}
+\newcount\@tempcnta
+\newcount\@tempcntb
+%    \end{macrocode}
+% \begin{macro}{\setprotcode}
+%    \verb|\setprotcode| anropas med en fontidentifierare som argument för
+%    att ställa in hur mycket varje tecken ska få skjuta ut i
+%    marginalen. Detta görs med \verb|\lpcode| och \verb|\rpcode| för
+%    vänster respektive höger sida. Varje tecken tilldelas här ett värde
+%    $n$, $0 \le n \le 1000$, som kan tolkas som de tusendelar av tecknets
+%    bredd som ska tillåtas skjutas ut. Det som krånglar till det här är en
+%    syntaktisk och en semantisk förändring av \verb|\lpcode| och
+%    \verb|\rpcode| som skett under utvecklingen av \pdfTeX. I \pdfTeX
+%    $< \mbox{0.14}$ antas det alltid att det är aktuell font som gäller
+%    och något fontargument existerar inte, och i \pdfTeX $\ge
+%    \mbox{0.14h}$ förändrades betydelsen av talet som varje tecken
+%    tilldelas, varför denna vid behov räknas om. Den förstnämnda
+%    skillnaden struntar vi i, varför \pdfTeX $\ge \mbox{0.14}$ krävs för
+%    att paketet ska fungera. Detta diskvalificerar i skrivande stund
+%    EFD-systemet, vars \pdfTeX inte är nyare än 0.13d.
+%    \begin{macrocode}
+\def\setprotcode#1{%
+  \rpcode#1`\!=200
+  \rpcode#1`\,=700
+  \rpcode#1`\-=700
+  \rpcode#1`\.=700
+  \rpcode#1`\;=500
+  \rpcode#1`\:=500
+  \rpcode#1`\?=200
+  \lpcode#1`\`=700
+  \rpcode#1`\'=700
+  \lpcode#1 92=500  % ``
+  \rpcode#1 34=500  % ''
+  \rpcode#1 123=300 % --
+  \rpcode#1 124=200 % ---
+  \rpcode#1`\)=50
+  \rpcode#1`\A=50
+  \rpcode#1`\F=50
+  \rpcode#1`\K=50
+  \rpcode#1`\L=50
+  \rpcode#1`\T=50
+  \rpcode#1`\V=50
+  \rpcode#1`\W=50
+  \rpcode#1`\X=50
+  \rpcode#1`\Y=50
+  \rpcode#1`\k=50
+  \rpcode#1`\r=50
+  \rpcode#1`\t=50
+  \rpcode#1`\v=50
+  \rpcode#1`\w=50
+  \rpcode#1`\x=50
+  \rpcode#1`\y=50
+  \lpcode#1`\(=50
+  \lpcode#1`\A=50
+  \lpcode#1`\J=50
+  \lpcode#1`\T=50
+  \lpcode#1`\V=50
+  \lpcode#1`\W=50
+  \lpcode#1`\X=50
+  \lpcode#1`\Y=50
+  \lpcode#1`\v=50
+  \lpcode#1`\w=50
+  \lpcode#1`\x=50
+  \lpcode#1`\y=50
+%    \end{macrocode}
+%    Som jag nämnde förändrades betydelsen av talet som varje tecken
+%    tilldelas i \pdfTeX 0.14h, och om nuvarande \pdfTeX är såpass ny
+%    räknas talen om med hjälp av \verb|\adjustprotcode|.
+%
+%    Uppdaterat 2012-02-19 för att fungera med nya versioner av \pdfTeX
+%    som har tvåsiffriga revisionsnummer, aktuell revision i debian är 
+%    nu 1.40.10 där, som en workaround körs enbart koden nedan för
+%    revision 14.
+%    \begin{macrocode}
+  \ifnum\pdftexversion > 14
+    \adjustprotcode#1
+  \else
+    \ifnum\pdftexversion > 13
+      \ifnum\expandafter`\pdftexrevision > `g
+        \adjustprotcode#1
+      \fi
+    \fi
+  \fi
+
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\adjustprotcode}
+%    Här loopas varje tecken i fonten som ges som argument igenom och dess
+%    värde beräknas om med \verb|\adjustcp|.
+%    \begin{macrocode}
+\def\adjustprotcode#1{%
+  \@tempcnta=0
+  \loop
+    \ifcase\lpcode#1\@tempcnta\else
+      \adjustcp\lpcode#1\@tempcnta
+    \fi
+    \ifcase\rpcode#1\@tempcnta\else
+      \adjustcp\rpcode#1\@tempcnta
+    \fi
+    \advance\@tempcnta 1
+  \ifnum\@tempcnta < 256 \repeat
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\adjustcp}
+%    Beräkna om det specificerade tecknet för \pdfTeX $\ge \mbox{0.14h}$.
+%    \begin{macrocode}
+\def\adjustcp#1#2#3{%
+  \setbox0=\hbox{%
+    \ifx#2\font\else#2\fi
+    \char#3}%
+  \@tempcntb=\wd0
+  \multiply\@tempcntb #1#2#3
+  \divide\@tempcntb \fontdimen6 #2
+  #1#2#3=\@tempcntb
+}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \Finale

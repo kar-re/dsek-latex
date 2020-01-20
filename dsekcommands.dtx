@@ -1,0 +1,714 @@
+%\iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{xspace}
+\usepackage{texnames}
+\usepackage{dsekcommands}
+\usepackage{ifthen}
+\usepackage{booktabs}
+\usepackage{rcsinfo}
+\usepackage{ifpdf}
+
+\ifpdf
+  \RequirePackage[pdfpagemode=UseOutlines,
+                  bookmarks=true,
+                  bookmarksnumbered,
+                  bookmarksopen=true,
+                  pdfauthor={Magnus Bäck},
+                  pdftitle={Paketet dsekcommands},
+                  colorlinks=true,
+                  linkcolor=black,
+                  urlcolor=black]{hyperref}[2001/04/13]
+\fi
+
+\rcsInfo $Id: dsekcommands.dtx,v 1.6 2003/02/25 22:39:24 magnus Exp $
+\def\rcsIsoDateHelper#1/#2/#3{#1--#2--#3}
+\def\rcsIsoDate{\expandafter\rcsIsoDateHelper\rcsInfoDate}
+
+\EnableCrossrefs
+
+\newcommand{\TtH}{%
+  T\kern-.25em\raise-.4ex\hbox{\sc \uppercasesc t}\kern-.10emH\xspace}
+\newcommand{\pdfLaTeX}{pdf\LaTeX\xspace}
+
+\begin{document}
+  \DocInput{dsekcommands.dtx}
+\end{document}
+%</driver>
+%\fi
+% \title{Paketet \textsf{dsekcommands}}
+% \author{Magnus Bäck \texttt{<magnus@dsek.lth.se>}}
+% \date{\rcsIsoDate, v\rcsInfoRevision}
+%
+% \maketitle
+%
+% \tableofcontents
+%
+% \section{Introduktion}
+%
+%    Det här paketet innehåller många av de kommandon som används av
+%    \LaTeX-paketen utvecklade av Datatekniksektionen inom TLTH. Syftet
+%    med paketet är att man ska kunna använda kommandona fristående utan
+%    att få med ändringar av marginaler etc ''på köpet''.
+%
+% \section{Paketoptioner}
+%
+%    Det finns två möjliga optionerna som man kan ge till paketet;
+%    \texttt{bw} och \texttt{col}. Dessa används för att tala om huruvida
+%    inkluderade sigill (vilket görs med \verb|\Dlogo| och
+%    \verb|\Dlogosmall|) ska vara i färg eller inte.
+%
+% \section{Makron och omgivningar}
+%
+% \subsection{Att infoga logotyper}
+%
+%    Kommandona för att inkludera D-sektionslogotyper äro fyra. Man kan
+%    välja mellan att inkludera hela sigillet eller bara D:et
+%    (\DescribeMacro{\Dlogo}\verb|\Dlogo|~ resp.
+%    \DescribeMacro{\Dsymbol}\verb|\Dsymbol|), samt om man
+%    vill använda den hög- eller lågupplösta versionen av filen (se
+%    nedan).
+%
+%    \medskip
+%    \begin{minipage}{0.45\textwidth}
+%      \begin{verbatim}
+%\Dlogo[10mm]
+%      \end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%       \Dlogosmall[10mm]
+%    \end{minipage}
+%    \par
+%    \begin{minipage}{0.45\textwidth}
+%      \begin{verbatim}
+%\Dsymbol[10mm]
+%      \end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%       \Dsymbolsmall[10mm]
+%    \end{minipage}
+%    \medskip
+%
+%    Skillnaden i bildkvalitet mellan den högupplösta och den
+%    lågupplösta versionen av respektive bild är i bästa fall
+%    försumbar, men skillnaden i filstorlek är desto större (upp till
+%    en faktor tio). Om inte särskilda skäl föreligger rekommenderas
+%    den ''lågupplösta'' bilden, som man får genom att lägga till
+%    suffixet \texttt{small} på varje kommandonamn,
+%    dvs. \verb|\Dlogosmall|\DescribeMacro{\Dlogosmall}
+%    resp. \verb|\Dsymbolsmall|\DescribeMacro{\Dsymbolsmall}.
+%
+%    Alla dessa kommandon tar ett valfritt argument som anger den önskade
+%    höjden på bilden. Om argumentet uteblir väljes höjden 10~punkter.
+%
+%    Notera att D:et (och för den delen alla andra sektionssymboler)
+%    kan infogas i form av ett typsnitt. Detta är att föredra om man
+%    inte har väldigt speciella skäl. Se avsnitt~\ref{sec:lthsymb}.
+%
+% \subsection{Namnunderskrifter}
+%
+%    För att producera plats för namnunderskrifter används kommandot
+%    \DescribeMacro{\signature}\verb|\signature|. Kommandot tar fyra
+%    argument. Det första är valfritt och anger hur mycket
+%    horisontell plats som ska användas för signaturen (om man anger
+%    för liten bredd kommer texten att brytas), och om det utelämnas
+%    kommer automatiskt tillräckligt stor plats att allokeras. I
+%    normala fall duger detta alldeles utmärkt. De tre övriga
+%    (obligatoriska) argumenten används för respektive överskrift,
+%    namn och titel. Namnet finns det knappast någon anledning att
+%    inte ha med, men övriga finns det inte alltid ett behov av. Det
+%    går utmärkt att ha flera underskrifter på bredden på en sida
+%    (upp till tre är inga problem), men då får man komma ihåg att
+%    inte ha en blankrad eller något annat som skapar nya stycken
+%    mellan anropen.
+%
+%    \medskip
+%    \begin{minipage}{0.45\textwidth}
+%\begin{verbatim}
+%\signature{Lund, dag som ovan}{%
+%  Börje Börjesson}{Gammal}
+%\end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%\signature{Lund, dag som ovan}{Börje Börjesson}{Gammal}
+%    \end{minipage}
+%    \medskip
+%
+%    Det finns fyra längder som man kan ändra för att påverka hur
+%    signaturen typsätts. \verb|\signaturetopskip| talar om hur stort
+%    avstånd som ska lämnas till texten ovanför (sätts normalt till
+%    \verb|\baselineskip|, dvs. en radhöjd),
+%    \verb|\signaturebottomskip| anger motsvarande plats under
+%    signaturen, \verb|\signatureheight| anger hur mycket plats som
+%    ska lämnas åt själva underskriften (standard är 15~mm) och
+%    slutligen \verb|\signaturehorizskip| som anger det horisontella
+%    avståndet mellan två signaturer som placeras i bredd.
+%
+% \subsection{Att-listor et cetera}
+%
+%    I såväl protokoll, mötesbilagor som stadgar och reglemente behövs
+%    att-listor för att spalta upp yrkanden o~dyl. Detta görs med
+%    fördel med omgivningen \DescribeEnv{attlista}\texttt{attlista}, som 
+%    används precis som t.ex. \texttt{itemize}.
+%
+%    \vspace{\baselineskip}
+%    \begin{minipage}{0.45\textwidth}
+%\begin{verbatim}
+%Vi beslutade
+%\begin{attlista}
+%  \item råsa är en fin färg.
+%  \item D-sektionen minsann ska 
+%    vinna Sångarstriden vartannat 
+%    år.
+%\end{attlista}
+%\end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%      Vi beslutade
+%      \begin{attlista}
+%        \item råsa är en fin färg.
+%        \item D-sektionen minsann ska vinna Sångarstriden vartannat år.
+%      \end{attlista}
+%    \end{minipage}
+%    \medskip
+% 
+%    Det finns även en generalisering av \texttt{attlista} som kan
+%    användas för liknande fall då texten inte ska lyda ''att'' utan
+%    kanske ''då'' eller ''av''. Den omgivningen heter
+%    \DescribeEnv{fetlista}\texttt{fetlista} och tar ett argument i
+%    form av den text som ska användas i stället.
+%
+%    \vspace{\baselineskip}
+%    \begin{minipage}{0.45\textwidth}
+%\begin{verbatim}
+%Sektionens funktionärer är:
+%\begin{fetlista}{av}
+%  \item sektionsmötet utsedda till
+%    förtroendeposter, samt
+%  \item sektionsstyrelsen utsedda
+%    till förtroendeposter
+%\end{fetlista}
+%\end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%      Sektionens funktionärer är:
+%      \begin{fetlista}{av}
+%        \item sektionsmötet utsedda till
+%          förtroendeposter, samt
+%        \item sektionsstyrelsen utsedda
+%          till förtroendeposter
+%      \end{fetlista}
+%    \end{minipage}
+%    \medskip
+%
+% \subsection{Länkar till personakter}
+%
+%    Eftersom en stor del av de producerade dokumenten publiceras på
+%    WWW så vore det synd att inte utnyttja detta. Makrot
+%    \DescribeMacro{\personakt}|\personakt| skapar en hyperlänk till
+%    en persons personakt på D-sektionens hemsida. Makrot tar två
+%    argument, personens namn (dvs. länktexten) samt dennes
+%    användaridentitet på EFD-systemet. Detta kommer bara att fungera
+%    när man gör en PDF med \pdfLaTeX eller använder |latex2maz| för
+%    att skapa en HTML-version. Exempel följer.
+%
+%    \vspace{\baselineskip}
+%    \begin{minipage}{0.45\textwidth}
+%\begin{verbatim}
+%\personakt{Magnus Bäck}{d98mba}
+%\end{verbatim}
+%    \end{minipage}
+%    \quad
+%    \begin{minipage}{0.45\textwidth}
+%      \personakt{Magnus Bäck}{d98mba}
+%    \end{minipage}
+%    \medskip
+%
+% \subsection{Sektionssymboler i texterna}
+% \label{sec:lthsymb}
+%
+%    För att göra protokoll o~dyl lite roligare är det lätt att när
+%    man skriver D-sektionen i stället få \dsek-sektionen. Symboler
+%    finns för samtliga LTH-sektioner samt ytterligare några relaterade
+%    symboler enligt tabellen nedan.
+%
+%    \begin{table}[htbp]
+%      \centering
+%      \begin{tabular}{lll}
+%        \toprule
+%        \emph{symbol} & \emph{betydelse} & \emph{makro} \\ \midrule
+%        \fsek         & F-sektionen      & |\fsek| \\
+%        \esek         & E-sektionen      & |\esek| \\
+%        \msek         & M-sektionen      & |\msek| \\
+%        \vsek         & V-sektionen      & |\vsek| \\
+%        \asek         & A-sektionen      & |\asek| \\
+%        \ksek         & K-sektionen      & |\ksek| \\
+%        \dsek         & D-sektionen      & |\dsek| \\
+%        \wsek         & W-sektionen      & |\wsek| \\
+%        \driftsek     & Drift-sektionen  & |\driftsek|\\
+%        \af           & Akademiska föreningen & |\af| \\
+%        \tlth         & Teknologkåren inom LTH & |\tlth| \\
+%        \hilbert      & Hilbert Älg      & |\hilbert| \\
+%        \bottomrule
+%      \end{tabular}
+%    \end{table}
+%
+% \subsection{Övriga}
+%
+%    Flera av de definierade kommandona finns bara för att göra några
+%    vanliga saker enklare att skriva så man ska slippa komma ihåg exakt
+%    hur man får fram trademarksymboler och annat. De gör det också 
+%    väsentligt enklare att använda \TtH för konvertering till
+%    HTML. Nedanstående lista visar kommandona och resultatet man får av
+%    dem.
+%
+%    \begin{itemize}
+%      \item \verb|\DIMMA|\DescribeMacro{\DIMMA}~ger \DIMMA.
+%      \item \verb|\ddu|\DescribeMacro{\ddu}~ger \ddu.
+%      \item \verb|\idet|\DescribeMacro{\idet}~ger \idet.
+%      \item \verb|\MaTeX|\DescribeMacro{\MaTeX}~ger \MaTeX.
+%      \item \verb|\timemanagern|\DescribeMacro{\timemanagern}~ger
+%        \timemanagern.
+%    \end{itemize}
+%
+% \subsection{Sidreferenser utan hyperlänkar}
+% \label{sec:nohyperpageref}
+%
+%    Om man använder \pdfLaTeX i stället för vanliga \LaTeX{} kommer
+%    alla sidreferenser som man gör med \verb|\pageref| att bli
+%    hyperlänkar till den aktuella sidan. I många fall är det bra,
+%    men om man t.ex. skriver ut den sista sidan i sidfoten med
+%    \verb|\pageref{LastPage}| (vilket kräver paketet
+%    \textsf{lastpage}) så är det knappast önskvärt att varje sidfot
+%    innehåller en hyperlänk till sista sidan.
+%
+%    För att lösa det problemet kan man använda det i
+%    \textsf{hyperref} inbyggda makrot \verb|\hypergetpageref|, men
+%    det fungerar då förstås bara om man inkluderar det
+%    paketet. Detta görs bara när man använder \pdfLaTeX, och därför
+%    finns makrot \DescribeMacro{\nohyperpageref}\verb|\nohyperpageref|
+%    som använder \verb|\hypergetpageref| om det finns tillgängligt,
+%    och om det inte finns så blir effekten samma som en vanlig
+%    \verb|\pageref|.
+%
+%    Använd alltså \verb|\nohyperpageref| i de fall du vill ha en
+%    sidhänvisning som under inga omständigheter ska bli en hyperlänk.
+%
+% \appendix
+% \section{Komplett och kommenterad källkod}
+%
+% \subsection{Prolog och definitioner}
+%
+%    Börja med att tala om att vi behöver \LaTeXe{} och eventuellt vilken
+%    version vi också behöver. Skriv också ut filnamnet och versionen när
+%    filer som använder \textsf{dsekcommands} kompileras.
+%    \begin{macrocode}
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dsekcommands}
+\typeout{This is dsekcommands.sty, version 2003-02-25}
+%    \end{macrocode}
+%    Definiera symbolen \verb|\@dseklogoprovided| för att paketet
+%    \textsf{dwww} ska veta att kommandon för att infoga logotypen
+%    redan är definierade.
+%    \begin{macrocode}
+\def\@dseklogoprovided{yes}
+%    \end{macrocode}
+%    Inkludera nu de paket som behövs. \textsf{textcomp} behövs för
+%    att få trademarksymbolen och \textsf{texnames} för ett kommandon
+%    som används vid definitionen av \verb|\MaTeX|. \textsf{graphicx}
+%    används givetvis för att kunna inkludera bilder (för
+%    logotyperna). \textsf{xspace} behövs, slutligen, för kommandot
+%    med samma namn ska finnas.
+%
+%    För att följa praxis används \verb|\RequirePackage| i stället för 
+%    \verb|\usepackage|, men den enda skillnaden mellan dem är att det
+%    förstnämnda kommandot som valfritt argument kan ta den äldsta
+%    version av paketet som ska accepteras (på samma sätt som man kan
+%    ge den äldsta accepterbara \LaTeX-versionen som argument till 
+%    \verb|\NeedsTeXFormat|).
+%    \begin{macrocode}
+\RequirePackage{textcomp}
+\RequirePackage{xspace}
+\RequirePackage{texnames}
+\RequirePackage{graphicx}
+\RequirePackage{ifthen}
+%    \end{macrocode}
+%    Deklarera några konstanter som används för att bygga upp sökvägarna
+%    till bilderna. \verb|\@dseklogocolorspec| talar om vilket suffix
+%    som färgvarianterna av resp. bild har. Om \verb|\@dseklogopath|
+%    definieras så måste den avslutas med backslash.
+%    \begin{macrocode}
+\newcommand{\@dseklogocolorspec}{}
+\newcommand{\@dseklogopath}{}
+%    \end{macrocode}
+%    Här deklarerar vi de två optionerna \texttt{bw} och \texttt{col} som
+%    väljer svart-vita resp. färglagda logotyperna genom att modifiera
+%    \verb|\@dseklogocolorspec|.
+%    \begin{macrocode}
+\DeclareOption{bw}{%
+  \renewcommand{\@dseklogocolorspec}{bw}}
+\DeclareOption{color}{%
+  \renewcommand{\@dseklogocolorspec}{col}}
+%    \end{macrocode}
+%    Kör optionen \texttt{bw} (vilket väljer svarta-vita bilder som
+%    standard) och kör övriga optioner som kan ha specificerats.
+%    \begin{macrocode}
+\ExecuteOptions{bw}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+% \subsection{Deklarationer av makron och omgivningar}
+%
+% \begin{macro}{\Dlogo}
+%    Infogar en bild av D-sektionens sigill med
+%    \verb|\includegraphics|. För att bygga upp sökvägen till filen används
+%    \verb|\@dseklogopath| och \verb|\dseklogocolorspec|.
+%    \begin{macrocode}
+\newcommand{\Dlogo}[1][10pt]{%
+  \includegraphics[height=#1]{%
+    \@dseklogopath D-logo-org-\@dseklogocolorspec}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Dlogosmall}
+%    Samma som \verb|\Dlogo|, fast med en möjligen mer lågupplöst
+%    bild. I praktiken är det förmodligen ingen skillnad, så om man
+%    inte har väldigt stora krav finns det ingen anledning att välja
+%    den större filen.
+%    \begin{macrocode}
+\newcommand{\Dlogosmall}[1][10pt]{%
+  \includegraphics[height=#1]{%
+    \@dseklogopath D-logo-org-\@dseklogocolorspec-compact}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Dsymbol}
+%    Infogar en bild av D-sektionens speciella D. Fungerar på samma sätt
+%    som \verb|\Dlogo|, men här finns det bara en svart-vit variant.
+%    \begin{macrocode}
+\newcommand{\Dsymbol}[1][10pt]{%
+  \includegraphics[height=#1]{%
+    \@dseklogopath D-symbol}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\Dsymbolsmall}
+%    En ''lågupplöst'' variant av \verb|\Dsymbol|.
+%    \begin{macrocode}
+\newcommand{\Dsymbolsmall}[1][10pt]{%
+  \includegraphics[height=#1]{%
+    \@dseklogopath D-symbol-compact}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\nohyperpageref}
+%    Som nämns i avsnitt~\ref{sec:nohyperpageref} behövs ett
+%    kompletterande makro för att \verb|\nohypergetpageref| ska fungera
+%    även när man inte använder \textsf{hyperref}.
+%    \begin{macrocode}
+\newcommand{\nohyperpageref}[1]{%
+  \ifx\hypergetpageref\undefined
+    \pageref{#1}%
+  \else
+    \hypergetpageref{#1}%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\tthdump}
+%    Till avdelningen fula hack hör \verb|\tthdump| som används för att få
+%    \TtH att ignorera ett stycke kod. Detta används i definitionen av
+%    vissa kommandon när den kod som \TtH producerar inte är speciellt bra
+%    och där vi själva vill välja hur den ska se ut (vilket görs med
+%    \verb|\special|-kommandon.
+%    \begin{macrocode}
+\def\tthdump#1{#1}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\xspacedsek}
+%    Följande kommando är något av ett hack för att få \verb|\xspace| att
+%    fungera bra även vid \TtH-konvertering. \verb|\xspace| fungerar ju så,
+%    att den infogar ett mellanslag om det behövs genom att titta på
+%    nästkommande tecken (via \verb|\if@nextchar|?). Det kanske skulle gå
+%    att få sedan funktionalitet även när man använder \TtH, men tills
+%    vidare är det hårdkodat så att \verb|\xspacedsek| alltid skriver ut 
+%    ett mellanslag när man kör \TtH och använder riktiga \verb|\xspace| när
+%    man kör dokumentet genom \LaTeX.
+%    \begin{macrocode}
+\newcommand{\xspacedsek}{\tthdump{\xspace}%
+%%tth:\special{html: }%
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\signature}
+%    Namnteckningar typsätts med \verb|\signature|. Texterna som ges av de 
+%    tre sista argumenten typsätts i en \verb|\parbox| med en bredd
+%    som motsvaras av den bredaste av de tre texterna, om inte ett
+%    första valfritt argument har getts. Detta valfria argument
+%    används för att sätta bredden till ett fast värde.
+%    Avståndet från texten ovanför och början på signaturen sätts till
+%    \verb|\signaturetopskip| (normalt  \verb|\baselineskip|),
+%    avståndet undertill sätts till \verb|\signaturebottomskip| (dito),
+%    den vertikala plats som ges för att skriva namnteckningen till
+%    \verb|\signatureheight| (15~mm) och avståndet mellan två
+%    signaturer sätts till \verb|\signaturehorizskip| (10~mm).
+%
+%    Börja med att definiera alla nya längder, samt den temporära
+%    längden \verb|\temp@sigwidth| som används vid beräkningen av den
+%    bredaste texten.
+%    \begin{macrocode}
+\newlength{\signaturetopskip}
+\setlength{\signaturetopskip}{\baselineskip}
+\newlength{\signaturebottomskip}
+\setlength{\signaturebottomskip}{\baselineskip}
+\newlength{\signaturewidth}
+\newlength{\signatureheight}
+\setlength{\signatureheight}{15mm}
+\newlength{\signaturehorizskip}
+\setlength{\signaturehorizskip}{10mm}
+\newlength{\temp@sigwidth}%
+%    \end{macrocode}
+%    Definera makrot och låt det första (valfria) argumentet vara tomt
+%    om det utelämnas, så kan detta användas för test.
+%    \begin{macrocode}
+\newcommand{\signature}[4][]{%
+  \tthdump{\vspace{\signaturetopskip}%
+%    \end{macrocode}
+%    Testa om det valfria argumentet är tomt. Om så är fallet, beräkna
+%    hur bred signaturen måste vara för att allt ska få plats. Annars,
+%    sätt \verb|\signaturewidth| till bredden angiven i argumentet.
+%    \begin{macrocode}
+    \ifthenelse{\equal{#1}{}}{%
+%    \end{macrocode}
+%    Använd \verb|\settowidth| för att sätta längder till bredden av
+%    texten som ges som argument. Jämför sedan dessa längder och se
+%    till att den bredaste textlängden placeras i
+%    \verb|\signaturewidth|.
+%    \begin{macrocode}
+      \settowidth{\signaturewidth}{#2~}%
+      \settowidth{\temp@sigwidth}{#3~}%
+      \ifthenelse{\lengthtest{\temp@sigwidth>\signaturewidth}}{%
+        \setlength{\signaturewidth}{\temp@sigwidth}}{}%
+      \settowidth{\temp@sigwidth}{#4~}%
+      \ifthenelse{\lengthtest{\temp@sigwidth>\signaturewidth}}{%
+        \setlength{\signaturewidth}{\temp@sigwidth}}{}}{%
+      \setlength{\signaturewidth}{#1}}%
+%    \end{macrocode}
+%    Skapa en \verb|\parbox| med den tidigare beräknade bredden och
+%    placera dit textargumenten.
+%    \begin{macrocode}
+    \parbox[t]{\signaturewidth}{%
+      \raggedright #2~\vspace{\signatureheight}\\%
+      #3~\\%
+      #4~}%
+    \hspace{\signaturehorizskip}%
+    \vspace{\signaturetopskip}}%
+%%tth:\par#2\newline#3\newline#4
+}
+%    \end{macrocode}
+%
+%    Av hysteriska skäl finns även den gamla definitionen av
+%    \verb|\signature| kvar under namnet \verb|\oldsignature|.
+%    \begin{macrocode}
+\newcommand{\oldsignature}[3]{
+  \tthdump{\vspace{\signaturetopskip}\parbox[t]{\signaturewidth}{%
+      #1~\vspace{\signatureheight}\\%
+      #2~\newline%
+      #3~}}
+%%tth:\par#1\newline#2\newline#3
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\MaTeX}
+%    Definitionen till \verb|\MaTeX| är tagen direkt från
+%    \textsf{texnames} där \verb|\LaTeX| definieras. Några av avstånden
+%    har dock fått justeras för att bättre passa texten ''MaTeX'' 
+%    (kerningen mellan första och andra bokstaven är mindre aggressiv).
+%    \begin{macrocode}
+\newcommand{\MaTeX}{%
+  \tthdump{M\kern-.25em\raise.4ex\hbox{%
+      \sc \uppercasesc a}\kern-.15em\TeX\xspace}%
+%%tth:\special{html:M<sup>A</sup>T<sub>E</sub>\xspacedsek}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\personakt}
+%    \begin{macrocode}
+\newcommand{\personakt}[2]{%
+  \tthdump{%
+    \ifpdf
+      \href{http://www.dsek.lth.se/cgi-bin/personakt?#2}{#1}%
+    \else
+      #1
+    \fi}
+%%tth:\special{html:<a href="http://www.dsek.lth.se/cgi-bin/personakt?}%
+%%tth:#2\special{html:">}#1\special{html:</a>}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\timemanagern}
+%    \verb|\timemanagern| skriver bara ut texten ''TimeManagern'' och
+%    hämtar en färdig trademarksymbol från \textsf{textcomp},
+%    \verb|\texttrademark|. För \TtH-bruk används
+%    \texttt{<sup>}. Några mjuka bindestreck läggs även in för att
+%    underlätta avstavning.
+%    \begin{macrocode}
+\newcommand{\timemanagern}{%
+  \tthdump{Time\-Mana\-gern\texttrademark\xspace}%
+%%tth:\special{html:TimeManagern<sup>TM</sup>\xspacedsek}
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\DIMMA}
+%    \verb|\DIMMA| fungerar på exakt samma sätt som \verb|\timemanagern|.
+%    \begin{macrocode}
+\newcommand{\DIMMA}{%
+  \tthdump{DIMMA\texttrademark\xspace}%
+%%tth:\special{html:DIMMA<sup>TM</sup>\xspacedsek}
+}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\idet}
+%    Varför \verb|\idet| överhuvudtaget skrevs för att man ska kunna
+%    typsätta ''iDét'' har jag inte fått klarhet i men det får vara kvar om
+%    inte annat av hysteriska skäl (eller för de tillfällen man skriver på
+%    hugo-terminalen och inte har en editor med composemöjlighet\ldots). 
+%    Använder man T1-kodningen för att skriva så hanteras ju sånt här utan 
+%    problem rätt av (och avstavningen fungerar fint, även om det
+%    knappast är lämpligt att avstava just iDét). En skillnad jämfört 
+%    med den ursprungliga definitionen är att \verb|\xspace| används. 
+%    \begin{macrocode}
+\newcommand{\idet}{iD\'{e}t\xspacedsek}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{macro}{\ddu}
+%    Detsamma gäller \verb|\ddu|, som också kan skrivas utan extra
+%    hjälp. Det mest obegripliga är att den här definitionen ger en accent
+%    mellan ''D'' och ''du'', men det är ju en apostrof som vi vill ha.
+%    Därför utfärdas en varning vid användning av kommandot, vilket
+%    förhoppningsvis bidrar till att folk slutar använda det.
+%
+%    \begin{macrocode}
+\newcommand{\ddu}{D\'{ }du\xspacedsek%
+  \tthdump{%
+    \PackageWarning{dsekcommands}{%
+      The command `ddu' is obsolete and should not\MessageBreak
+      be used. Write the text "D'du" directly instead.}}}
+%    \end{macrocode}
+% \end{macro}
+%
+% \begin{environment}{fetlista}
+%    \texttt{fetlista} är en generell omgivning där den valfria
+%    etiketten som ges som argument skrivs ut i fetstil och är
+%    densamma för alla element. Implementationsmässigt används den
+%    ännu mer generella listomgivningen \texttt{list}.
+%    \begin{macrocode}
+\newenvironment{fetlista}[1]{%
+  \begin{list}{\textbf{#1 }}{%
+      \setlength{\labelsep}{0pt}}}{%
+  \end{list}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \begin{environment}{attlista}
+%    Omgivningen för att skriva att-listor, \texttt{attlista},
+%    använder den generella omgivningen för dylika listor,
+%    \texttt{fetlista}, definierad ovan.
+%    \begin{macrocode}
+\newenvironment{attlista}{%
+  \begin{fetlista}{att}}{%
+  \end{fetlista}}
+%    \end{macrocode}
+% \end{environment}
+%
+% \subsection{Sektionssymboler i texterna}
+%
+%    Sedan ett antal år finns samtliga sektionslogotyper i en
+%    TrueType-font, skapad av Jan-Erik Malmquist~(d93jm). Denna
+%    konverterades 1999 till \MF-format för användning med \TeX{} av
+%    Björn Ardö~(f98ba) och installerades på EFD-systemet under
+%    paketnamnet \textsf{lth}. I december 2001 införlivades
+%    W-sektionens logotyp av Magnus Bäck (d98mba), dock enbart till
+%    TrueType-versionen av fonten.
+%
+%    Allt var frid och fröjd, tills man upptäckte hur ohemult dåligt
+%    Adobe Acrobat hanterar metafonter och andra Type~3-fonter. Detta
+%    ledde till att den ursprungliga fonten konverterades till Type~1
+%    med hjälp av |ttf2pt1|, vilket ger bra resultat även i Acrobat. 
+%
+%    Definiera fontfamiljen ''lthsymb'' med OT1-kodningen och tala om
+%    att fontfilen med samma namn ska användas för vanlig stil och i
+%    samtliga storlekar.
+%    \begin{macrocode}
+\DeclareFontFamily{OT1}{lthsymb}{}
+\DeclareFontShape{OT1}{lthsymb}{m}{n}{ <-> lthsymb}{}
+%    \end{macrocode}
+% \begin{macro}{\lthsymb}
+%    Det enkla makrot \verb|\lthsymb| byter aktiv font till
+%    symbolfonten med logotyperna. Detta håller i sig till nästa
+%    fontbyte eller när den aktuella gruppen avslutas.
+%    \begin{macrocode}
+\newcommand{\lthsymb}{\usefont{OT1}{lthsymb}{m}{n}}
+%    \end{macrocode}
+% \end{macro}
+%
+%    Nedanstående makron gör det enklare att få fram en enstaka
+%    symbol, och det är ju ganska sällan man skriver löptext med
+%    symbolfonter\ldots{} För att det ska fungera fint när man
+%    använder \TtH tas det specialfallet om hand, dock enbart för
+%    symboler där översättningen är självklar.
+%    \begin{macrocode}
+\newcommand{\fsek}{\tthdump{{\lthsymb f}}%
+%%tth:F%
+}
+\newcommand{\esek}{\tthdump{{\lthsymb e}}%
+%%tth:E%
+}
+\newcommand{\msek}{\tthdump{{\lthsymb m}}%
+%%tth:M%
+}
+\newcommand{\vsek}{\tthdump{{\lthsymb v}}%
+%%tth:V%
+}
+\newcommand{\asek}{\tthdump{{\lthsymb a}}%
+%%tth:A%
+}
+\newcommand{\ksek}{\tthdump{{\lthsymb k}}%
+%%tth:K%
+}
+\newcommand{\dsek}{\tthdump{{\lthsymb d}}%
+%%tth:D%
+}
+\newcommand{\wsek}{\tthdump{{\lthsymb w}}%
+%%tth:W%
+}
+\newcommand{\driftsek}{\tthdump{{\lthsymb D}}%
+%%tth:Drift%
+}
+\newcommand{\af}{\tthdump{{\lthsymb A}}%
+%%tth:AF%
+}
+\newcommand{\tlth}{\tthdump{{\lthsymb l}}%
+%%tth:TLTH%
+}
+\newcommand{\hilbert}{{\lthsymb h}}
+%    \end{macrocode}
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+% \Finale

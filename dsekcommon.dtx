@@ -1,0 +1,566 @@
+%\iffalse
+%<*driver>
+\documentclass{ltxdoc}
+\usepackage[T1]{fontenc}
+\usepackage[swedish]{babel}
+\usepackage{xspace}
+\usepackage{texnames}
+\usepackage{dsekcommands}
+\usepackage{ifthen}
+\usepackage{url}
+\usepackage{rcsinfo}
+\usepackage{ifpdf}
+
+\ifpdf
+  \RequirePackage[pdfpagemode=UseOutlines,
+                  bookmarks=true,
+                  bookmarksnumbered,
+                  bookmarksopen=true,
+                  pdfauthor={Magnus Bäck},
+                  pdftitle={Paketet dsekcommon},
+                  colorlinks=true,
+                  linkcolor=black,
+                  urlcolor=black]{hyperref}[2001/04/13]
+\fi
+
+\rcsInfo $Id: dsekcommon.dtx,v 1.8 2002/11/09 22:53:30 magnus Exp $
+\def\rcsIsoDateHelper#1/#2/#3{#1--#2--#3}
+\def\rcsIsoDate{\expandafter\rcsIsoDateHelper\rcsInfoDate}
+
+\EnableCrossrefs
+
+\def\UrlFont{\slshape}
+
+\newcommand{\orgname}{D-sektionen inom TLTH}
+\newcommand{\TtH}{%
+  T\kern-.25em\raise-.4ex\hbox{\sc \uppercasesc t}\kern-.10emH\xspace}
+\newcommand{\pdfLaTeX}{pdf\LaTeX\xspace}
+\newcommand{\pdfTeX}{pdf\TeX\xspace}
+
+\begin{document}
+  \DocInput{dsekcommon.dtx}
+\end{document}
+%</driver>
+%\fi
+% \title{Paketet \textsf{dsekcommon}}
+% \author{Magnus Bäck \texttt{<magnus@dsek.lth.se>}}
+% \date{\rcsIsoDate, v\rcsInfoRevision}
+%
+% \maketitle
+%
+% \tableofcontents
+%
+% \section{Introduktion}
+%
+%    Paketet \textsf{dsekcommon} definierar en del några kommandon som är
+%    gemensamma för alla D-sektionspaket samt väljer lämpliga
+%    marginaler. Skillnaden mot det snarlika paketet \textsf{dsekcommands}
+%    är att det paketet inte är fristående och inte utan vidare kan
+%    inkluderas utan att sidans utseende riskeras att ändras.
+%
+% \section{Paketoptioner}
+%
+%    Det finns fyra klassoptioner att välja mellan; |pdfbookmarks|, 
+%    |nopdfbookmarks|, |pdfmarginkern| och |nopdfmarginkern|.
+%
+%    De två förstnämnda används för att tala om huruvida man vill ha
+%    bokmärken för varje avsnitt när man skapar PDF-dokument med
+%    \pdfLaTeX. |pdfbookmarks| är standard, men den stängs alltså av
+%    med |nopdfbookmarks|. Eftersom man sällan inkluderar
+%    \textsf{dsekcommands} själv är det listigast att ange optionen
+%    som global, dvs. när man anropar |\documentclass| i början
+%    av dokumentet:
+%\begin{verbatim}
+%\documentclass[a4paper,11pt,nopdfbookmarks]{article}
+%\end{verbatim}
+%    Bokmärken skapas bara för avsnitt som normalt är med i
+%    innehållsförteckningen, dvs. inte för avsnitt påbörjade med
+%    |\section*|, |\subsection*| m.fl. Detta kan dock
+%    åtgärdas med manuella anrop till |\addcontentline|; de tre
+%    argument som kommandot tar är i vilken förteckning (egentligen
+%    vilken fil) som raden ska läggas~-- eftersom det är
+%    innehållsförteckningen som vi vill ha in den i är ska det vara
+%    ''toc'', vilken avsnittsnivå det är samt texten som ska dit. Så
+%    här kan det se ut:
+%\begin{verbatim}
+%\addcontentsline{toc}{subsection}{Namn på avsnittet}
+%\end{verbatim}
+%
+%    |pdfmarginkern| och |nopdfmarginkern| anger huruvida
+%    marginaljustering ska användas för skapande av PDF-dokument. Detta
+%    innebär en begränsad hängande punktnotation, alltså att vissa tecken
+%    (citattecken, skiljetecken, parenteser, \ldots) tillåts hänga utanför
+%    marginalerna i syfte att ge en rakare och snyggare marginal. Se
+%    dokumentationen till paketet \textsf{dsekmarginkern} för mer
+%    information om detta. Av lathetsskäl fungerar detta enbart för \pdfTeX
+%    $\ge \mbox{0.14h}$, och om man använder en äldre version kommer det
+%    automatiskt att stängas av (men inte utan en varning).
+%
+% \section{Kommandon och omgivningar}
+%
+%    \textsf{dsekcommands} definerar egentligen bara ett enda helt nytt
+%    kommando, nämligen \DescribeMacro{\setheader}|\setheader| som
+%    sätter ett nytt sidhuvud för alla sidor. Ett D-sektionssigill sätts
+%    längst till vänster, texten \MakeUppercase{\orgname} och en valfri
+%    text strax till höger och en valfri text som beskriver dokumentet samt
+%    datum högerjusterat längst till höger. Se skiss nedan.
+%
+%    \begin{verbatim}
+%\setheader{VALFRI TEXT 1}{Valfri text 2}{2000--12--26}
+%    \end{verbatim}
+%
+%    \noindent\hfill
+%    \setlength{\unitlength}{1mm}
+%    \begin{picture}(100,10)(0,0)
+%      \put(5,5){\circle{10}}
+%      \put(5,5){\circle{7.5}}
+%      \put(3.5,3.3){\lthsymb\Large d}
+%      \put(14,6){\footnotesize\bfseries\MakeUppercase{\orgname}}
+%      \put(14,2.5){\footnotesize VALFRI TEXT 1}
+%      \put(90,6){\footnotesize Valfri text 2}
+%      \put(91,2.5){\footnotesize 2000--12--26}
+%    \end{picture}
+%    \hfill\null
+%    \bigskip
+%
+%    Första argumentet är den första valfri texten i figuren ovan. Den
+%    texten kommer automatiskt att konverteras till versaler och ska
+%    innehålla det utskott eller motsvarande som dokumentet härstammer
+%    från, t.ex. ''STYRELSEN'', ''STUDIERÅDET'' eller ''VALBEREDNINGEN''.
+%
+%    Det andra argumentet anger vad det är för sorts dokument,
+%    t.ex. ''Protokoll'', ''Bilaga'' eller ''Kallelse''. Det här argumentet
+%    kan lämnas tomt, i vilket fall den raden utgår och datumet centreras
+%    vertikalt.
+%
+%    Argument tre anger dokumentets datum.
+%
+% \appendix
+% \section{Komplett och kommenterad källkod}
+%
+% \subsection{Prolog}
+%
+%    Börja med att tala om att vi behöver \LaTeXe{} och eventuellt vilken
+%    version vi också behöver. Skriv också ut filnamnet och versionen när
+%    filer som använder \textsf{dsekcommands} kompileras.
+%    \begin{macrocode}
+%<*package>
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{dsekcommon}
+\typeout{This is dsekcommon.sty, version 2002-11-09}
+%    \end{macrocode}
+%    Inkludera nu de paket som behövs. För att följa praxis används
+%    |\RequirePackage| i stället för |\usepackage|, men den
+%    enda skillnaden mellan dem är att det förstnämnda kommandot som
+%    valfritt argument kan ta den äldsta version av paketet som ska
+%    accepteras (på samma sätt som man kan ge den äldsta accepterbara
+%    \LaTeX-versionen som argument till |\NeedsTeXFormat|).
+%
+%    \textsf{fontenc} och \textsf{babel} behövs för att \LaTeX{} ska
+%    acceptera svenska tecken utan knot och för att svensk avstavning
+%    m.m. ska användas. Om det blir nödvändigt att skriva sektionsdokument
+%    på något annat språk än svenska får det förstås bli några
+%    modifieringar här (förslagsvis en option för att välja språk).
+%    \begin{macrocode}
+\RequirePackage[T1]{fontenc}
+\RequirePackage[swedish]{babel}
+%    \end{macrocode}
+%    I enlighet med den grafiska profilen inkluderas \textsf{palatino} för
+%    att ge Palatino, Helvetica och Courier. \textsf{mathpazo} används för
+%    att byta fonterna använda i math mode till något som passar
+%    tillsammans med Palatino i stället för Computer Modern som verkligen
+%    inte passar i det sammanhanget.
+%    \begin{macrocode}
+\RequirePackage{palatino}
+\RequirePackage{mathpazo}
+%    \end{macrocode}
+%    \textsf{url} gör det enkelt att typsätta URLer utan att behöva använda
+%    escapesekvenser för specialtecken. Dessutom kan vi sätta URLerna i en
+%    speciell stil, vilket vi återkommer till.
+%    \begin{macrocode}
+\RequirePackage[T1]{url}
+%    \end{macrocode}
+%    \textsf{fancyhdr}, \textsf{sectsty}, \textsf{tocloft} och
+%    \textsf{caption2} gör det lätt att modifera resp. sidhuvud/sidfot,
+%    rubrikfonter, innehållsförteckningars utseende och
+%    bildtexter. \textsf{caption2} laddas med optionen |hang| som
+%    ger bildtexterna hängande indrag. \textsf{ifpdf} tillhandahåller
+%    |\ifpdf| (se avsnitt~\ref{sec:pdf}).
+%    \begin{macrocode}
+\RequirePackage{fancyhdr}
+\RequirePackage{sectsty}
+\RequirePackage{tocloft}
+\RequirePackage[hang]{caption2}
+\RequirePackage{ifpdf}
+%    \end{macrocode}
+%    Eftersom Helvetica av någon anledning är väldigt stor i
+%    jämförelse med Palatino i samma punktstorlek, skalas den ned till
+%    92\,\% av \textsf{helvet}. Denna option finns bara i PSNFSS~v8.1
+%    och senare.
+%    \begin{macrocode}
+\RequirePackage[scaled=0.92]{helvet}
+%    \end{macrocode}
+%    Slutligen behöver vi \textsf{dsekcommands} för några vanliga
+%    D-sektionskommandon.
+%    \begin{macrocode}
+\RequirePackage{dsekcommands}
+%    \end{macrocode}
+%    Det mer formella namnet på vår sektion. Dels blir det kortare att
+%    skriva på det här sättet, och dels lättare att ändra om det skulle
+%    behöva göras någon justering i framtiden.
+%    \begin{macrocode}
+\newcommand{\orgname}{D-sektionen inom TLTH}
+%    \end{macrocode}
+%
+% \subsection{Optioner}
+%
+%    Deklarera (de ömsesidigt uteslutande) optionerna |pdfbookmarks|
+%    och |nopdfbookmarks| och låt dem sätta |\dsek@bookmarks| och
+%    |\dsek@pdfpagemode| till lämpliga värden för
+%    \textsf{hyperref}-optionerna |bookmarks| och |pdfpagemode|.
+%    Notera även att |\tthdump| används eftersom \TtH annars ger
+%    konstiga utskrifter.
+%    \begin{macrocode}
+\tthdump{%
+  \DeclareOption{pdfbookmarks}{%
+    \def\dsek@bookmarks{true}%
+    \def\dsek@pdfpagemode{UseOutlines}}
+  \DeclareOption{nopdfbookmarks}{%
+    \def\dsek@bookmarks{false}%
+    \def\dsek@pdfpagemode{None}}
+%    \end{macrocode}
+%    Deklarera optionerna |pdfmarginkern| och |nopdfmarginkern|. Dessa
+%    används för att tala om huruvida marginaljustering ska användas
+%    när PDF-filer skapas med \pdfLaTeX. Denna marginaljustering
+%    påverkar inte radbrytningen. Här används, något slarvigt, en
+%    räknare. Borde egentligen bytas mot något bättre.
+%    \begin{macrocode}
+  \newcount\@usepdfmarginkern
+  \DeclareOption{pdfmarginkern}{%
+    \@usepdfmarginkern=1}
+  \DeclareOption{nopdfmarginkern}{%
+    \@usepdfmarginkern=0}
+%    \end{macrocode}
+%    Kör defaultoptionerna |nopdfbookmarks| och |pdfmarginkern| samt
+%    de optioner som användaren kan tänkas ha specificerat (men det är
+%    ju inte så våldsamt många att välja mellan\ldots).
+%    \begin{macrocode}
+  \ExecuteOptions{pdfbookmarks,pdfmarginkern}
+  \ProcessOptions\relax
+%    \end{macrocode}
+%
+%    Egentligen är det onödigt att använda räknare (som i de flesta
+%    \TeX-implem\-en\-ta\-tioner är en begränsad resurs) för sådana här
+%    saker, men nu har det blivit så. I praktiken spelar det knappast
+%    någon roll.
+%
+% \subsection{PDF-hantering}
+% \label{sec:pdf}
+%
+%    För att underlätta skapande av PDF-filer med \pdfLaTeX och göra
+%    de resulterande dokumenten snyggare och mer lättnavigerade görs 
+%    definitioner enligt nedan.
+%
+%    Kontrollera om vi producerar ett PDF-dokument med \pdfLaTeX, och
+%    vidtag då speciella åtgärder. |\ifpdf| definieras i
+%    \textsf{ifpdf} av Heiko Oberdiek. Börja med att välja bästa möjliga
+%    förlustfria komprimering (vilket normalt är satt som standard i
+%    |pdftex.cfg|.
+%    \begin{macrocode}
+  \ifpdf
+    \pdfcompresslevel=9
+%    \end{macrocode}
+%    Om |\@usepdfmarginkern| är ett skall vi utnyttja en av de
+%    mikrotypografiska finesser som \pdfTeX erbjuder; ''level~1 character
+%    protruding''. Se dokumentationen till \textsf{dsekmarginkern} för mer
+%    information. Nivå ett innebär att radbrytningen inte påverkas då
+%    algoritmen appliceras först när radbrytningen för ett stycke är
+%    färdig. Detta ger lite sämre brytningar än nivå två, men å andra sidan
+%    blir resultatet identiskt med vanliga \TeX.
+%    \begin{macrocode}
+    \ifnum\@usepdfmarginkern=1
+      \pdfprotrudechars=1
+%    \end{macrocode}
+%    Tyvärr är det inte så enkelt att man bara kan ändra
+%    |\pdfprotrudechars|, utan man måste även manuellt ange hur mycket
+%    varje enskilt tecken ska förskjutas ut i marginalen. Detta görs med
+%    |\lpcode| och |\rpcode| för left resp. right protrusion,
+%    dvs. hur mycket tecknena ska förskjutas ut i vänster- och
+%    högermarginalen. Eftersom detta måste anges tecken för tecken och
+%    dessutom räknas om för \pdfTeX $\ge$0.14h så finns koden separat i
+%    paketet \textsf{dsekmarginkern}.
+%    \begin{macrocode}
+      \RequirePackage{dsekmarginkern}
+%    \end{macrocode}
+%    I \textsf{dsekmarginkern} definieras bl.a. makrot |\setprotcode|
+%    som används för att sätta |\lpcode| och |\rpcode| för ett
+%    antal tecken i en font. Detta måste göras för varje font man vill att
+%    det ska fungera för, vilket vi ser till att ordna i början av varje
+%    dokument (enbart de viktigaste fonterna är med). |\setprotcode|
+%    tar aktuell font som argument. Eftersom syntaxen för |\lpcode|
+%    och |\rpcode| skiljer sig mellan \pdfTeX~0.13 och 0.14 stöder
+%    \textsf{dsekmarginkern} enbart \pdfTeX~0.14 och senare. Om en gammal
+%    version används ges i stället en varning för att göra användaren
+%    uppmärksam på detta.
+%    \begin{macrocode}
+      \AtBeginDocument{%
+        \ifnum\pdftexversion > 13
+          {\setprotcode\font}%
+          {\bfseries\setprotcode\font}%
+          {\itshape\setprotcode\font}%
+          {\slshape\setprotcode\font}%
+        \else
+          \PackageWarning{dsekcommon}{%
+            Margin kerning is only available with pdfTeX 0.14\MessageBreak
+            and later. Use the option `nopdfmarginkern' or\MessageBreak
+            upgrade pdfTeX if you don't want to see this\MessageBreak
+            warning anymore}%
+        \fi
+      }%
+    \fi
+%    \end{macrocode}
+%
+%    Paketet \textsf{hyperref} har väldigt trevliga funktioner för
+%    PDF-dokument; bl.a. ordnar den automatiskt bokmärken till alla
+%    rubriker som i t.ex. Adobe Acrobat Reader dyker upp som en 
+%    dokumentoutline till vänster. Här använder vi |\ifpdf| för
+%    att enbart ladda paketen om det är PDF-dokument som vi
+%    skapar. \textsf{hyperref} har visserligen ett visst mervärde även
+%    för dokument som körs igenom |dvips|, men det är vi inte
+%    intresserade av. 
+%
+%    Djupet av bokmärkesträdet påverkas av räknarna |tocdepth| och
+%    |secnumdepth|.
+%
+%    De extra optionerna |pdftex|, |bookmarksnumbered|, |colorlinks|
+%    och |linkcolor| används för att respektive tala om för
+%    \textsf{hyperref} att den ska producera specialuppmärkning för
+%    användning med \pdfTeX (vilket den listar ut i alla fall i alla
+%    icke-trasiga distributioner), att inte bara texten utan även
+%    numreringen ska tas med i namnen på bokmärkena, att länkarna inte
+%    ska vara inrutade utan färgade och att vanliga interna länkar ska
+%    vara blå (default är annars röd).
+%
+%    Börja med att kontrollera om |\@usepdfbookmarks|, alltså den
+%    flagga som talar om huruvida vi vill ha automatiska bokmärken för
+%    varje avsnitt, är satt till ett.
+%
+%    Det sista valfria argumentet innehåller den tidigaste version av
+%    \textsf{hyperref} som accepteras. Anledningen är att den
+%    versionen var den första med |\thispdfpagelabel|, vilket
+%    krävs för \textsf{dsekgather}.
+%    \begin{macrocode}
+    \RequirePackage[pdfpagemode=\dsek@pdfpagemode,
+                    bookmarks=\dsek@bookmarks,
+                    bookmarksnumbered,
+                    bookmarksopen=true,
+                    colorlinks=true,
+                    linkcolor=black,
+                    urlcolor=black]{hyperref}[2001/04/13]
+%    \end{macrocode}
+%
+%    Det är ju ganska käckt om den information om dokumentet som man
+%    petat med |\title| och |\author| hänger med i
+%    filinformationen för PDF-dokumentet, vilket görs med kommandot
+%    |\pdfinfo|. Användaren ska dock inte behöva mecka med detta
+%    själv, varför värdena plockas från |\@title| respektive
+%    |\@author|.
+%
+%    Till att börja med har vi följande fulhack som tömmer
+%    |\@title| och |\@author|. Detta vill vi göra eftersom
+%    de normalt innehåller skräp från början, och detta fortplantar
+%    sig på att mycket otrevligt sätt om inte användaren definierar
+%    dem med anrop till |\title| och |\author|.
+%    \begin{macrocode}
+    \def\@author{}
+    \def\@title{}
+%    \end{macrocode}
+% \begin{macro}{\makepdfinfo}
+%    För att slippa definiera om |\title| och |\author| och
+%    för att inte användaren själv ska behöva göra ett separat anrop 
+%    för att |\pdfinfo| ska anropas med rätt argument görs detta 
+%    i en hook som körs när dokumentet börjar. Detta riskerar inte att 
+%    bli för tidigt eftersom |\title| och |\author| bara
+%    anropas i dokumentets prolog. En sådan hook definieras med
+%    |\AtBeginDocument|, och vi väljer här att den ska peka på
+%    kommandot |\makepdfinfo|, som därmed även kan anropas
+%    manuellt om det av någon anledning skulle vara nödvändigt. Om man
+%    anropar |\pdfinfo| flera gånger och anger samma
+%    informationsnyckel flera gånger kommer det första värdet alltid
+%    att gälla, så det går inte att byta författare i efterhand.
+%
+%    Eftersom det kan finnas styrkoder och makron i |\@title| och
+%    |\@author| som expanderas så används |\pdfstringdef| för att
+%    oskadliggöra dessa. Blir det ändå galet kan man prova att 
+%    använda |\texorpdfstring|\footnote{Beskrivs i avsnitt~6.1 av
+%    \emph{PDF information and navigation elements with hyperref,
+%    \pdfTeX, and thumbpdf} av Heiko Oberdiek. Se 
+%    \url{ftp://ftp.tug.org/pub/tex/hyperref/doc/paper.pdf}.} 
+%    eller~-- om det är generella saker~--
+%    |\pdfstringdefDisableCommands|.
+%
+%    \textsf{hyperref} $\ge$6.71v kan med optionen \texttt{pdfusetitle}
+%    automatiskt göra allt detta åt oss, men eftersom det den här
+%    koden redan var skriven, verkar fungera bra och ger oss lite extra
+%    kontroll så kvarstår detta tills vidare.
+%    \begin{macrocode}
+    \AtBeginDocument{\makepdfinfo}
+    \newcommand{\makepdfinfo}{%
+      \pdfstringdef\pdf@title\@title
+      \pdfstringdef\pdf@author\@author
+      \pdfinfo{/Title   (\pdf@title)
+               /Author  (\pdf@author)
+               /Creator (LaTeX 2e)}}
+%    \end{macrocode}
+% \end{macro}
+%     Avsluta den if-sats som påbörjades med |\ifpdf|.
+%    \begin{macrocode}
+  \fi
+%    \end{macrocode}
+%    Avsluta den grupp som påbörjades med |\tthdump|.
+%    \begin{macrocode}
+}
+%    \end{macrocode}
+%
+% \subsection{Val av typsnitt för olika delar av dokumentet}
+%
+%    Välj en lutad (slanted) font för typsättning av URLer.
+%    \begin{macrocode}
+\def\UrlFont{\slshape}
+%    \end{macrocode}
+%    Välj en sans-seriffont för alla rubrikfonter. |\allsectionsfont|
+%    tillhandahålls av \textsf{sectsty}.
+%    \begin{macrocode}
+\allsectionsfont{\sffamily\bfseries}
+%    \end{macrocode}
+%    Välj liten och kursiv stil för alla bildtexter med tillhörande etikett
+%    (gäller förstås även tabelltexter och alla andra sorters floats).
+%    \begin{macrocode}
+\renewcommand{\captionfont}{\small\itshape}
+\renewcommand{\captionlabelfont}{\small\itshape}
+%    \end{macrocode}
+%
+% \subsection{Innehållsförteckningars utseende}
+%
+%    Med standardinställningarna blir innehållsförteckningar alldeles för
+%    vertikalt utdragna med rent löjliga avstånd mellan t.ex. raderna för
+%    underrubriker. De makron som paketet \textsf{tocloft} gör det lätt att
+%    ändra detta.
+%
+%    Sätt extraavståndet före andra- och tredjenivårubriker till noll, men
+%    tillåt utrymmet att växa till tre punkter om det behövs för att \TeX{}
+%    ska kunna fylla hela sidan (irrelevant om man använder
+%    |\raggedbottom|).
+%    \begin{macrocode}
+\setlength{\cftbeforesubsecskip}{0pt plus 3pt}
+\setlength{\cftbeforesubsubsecskip}{0pt plus 3pt}
+%    \end{macrocode}
+%    När man inkluderar \textsf{tocloft} nollställs en eventuellt vald font
+%    för rubrikerna, så det måste göras här separat. För att minska behovet
+%    av att ändra på flera ställen ifall vi skulle vilja ändra på
+%    toppnivårubrikers utseende använder vi makrot |\SS@sectfont| som
+%    \textsf{sectsty} definierar åt oss.
+%    \begin{macrocode}
+\renewcommand{\cfttoctitlefont}{\Large\bfseries\SS@sectfont}
+%    \end{macrocode}
+%
+% \subsection{Marginaler och andra mått}
+%
+%    Ställ in marginalerna. Detta kan göras på ett \emph{mycket} enklare
+%    sätt med t.ex. \textsf{geometry}-paketet. Det fungerar dock, och
+%    konverteringen lämnas som en övning till läsaren.
+%    \begin{macrocode}
+\setlength{\textheight}{230mm}
+\setlength{\textwidth}{160mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\setlength{\topmargin}{-15mm}
+%    \end{macrocode}
+%    Sätt de mått som hör till sidhuvuden och sidfötter. |\headheight|
+%    behöver justeras manuellt så inte \TeX{} gnäller om ''Overfull vbox''
+%    hela tiden.
+%    \begin{macrocode}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0.7pt}
+\setlength{\headwidth}{\textwidth}
+\setlength{\headsep}{20mm}
+\setlength{\headheight}{16mm}
+%    \end{macrocode}
+%    Ta bort indraget på styckets första rad och sätt ett vertikalt avstånd
+%    mellan styckena i stället.
+%    \begin{macrocode}
+\setlength{\parskip}{3mm}
+\setlength{\parindent}{0mm}
+%    \end{macrocode}
+%    Ändra stilen fotnötterna så de får hängande indrag i stället för
+%    indrag på första raden.
+%    \begin{macrocode}
+\renewcommand{\@makefntext}[1]{%
+  \parindent 2.2em\everypar={\hangafter 1\hangindent 1em}%
+  \noindent\makebox[1em][l]{\textsuperscript{\@thefnmark}\ }#1}
+%    \end{macrocode}
+%
+% \subsection{Nya makron}
+%
+% \begin{macro}{\maketitle}
+%    Omdefiniera |\maketitle| så att ett 32\,mm stort D-sektionssigill
+%    inkluderas på försättsbladet.
+%    \begin{macrocode}
+\renewcommand{\maketitle}{\begin{titlepage}%
+  \let\footnotesize\small
+  \let\footnoterule\relax
+  \let \footnote \thanks
+  \null\vfil
+  \vskip 60\p@
+  \begin{center}%
+    {\LARGE\bf\sffamily\@title\par}%
+    \vskip 3em%
+    {\large
+     \lineskip .75em%
+      \begin{tabular}[t]{c}%
+        \@author
+      \end{tabular}\par}%
+      \vskip 1.5em%
+    {\large\@date\par}%
+  \vskip 20\p@
+  \Dlogosmall[32mm]
+  \end{center}\par
+  \@thanks
+  \vfil\null
+  \end{titlepage}%
+  \setcounter{footnote}{0}%
+  \global\let\thanks\relax
+  \global\let\maketitle\relax
+  \global\let\@thanks\@empty
+  \global\let\@author\@empty
+  \global\let\@date\@empty
+  \global\let\@title\@empty
+  \global\let\title\relax
+  \global\let\author\relax
+  \global\let\date\relax
+  \global\let\and\relax
+}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\setheader}
+%    Sätt sidhuvudet med D-sektionssigillet. Sigillet och texten
+%    ''\MakeUppercase{\orgname}'' med en valfri text undertill
+%    sätts i en |\parbox| för vardera sigill och de båda texterna i
+%    vänstra delen av sidhuvudet med |\lhead| medan de två övriga
+%    valfria texterna sätts högerjusterade med |\rhead|. Töm
+%    mittendelen av sidhuvudet för att garantera att inget gammalt groll
+%    blir liggandes kvar.
+%    \begin{macrocode}
+\newcommand{\setheader}[3]{% 
+  \lhead{\parbox{18mm}{\Dlogosmall[16mm]}%
+    \parbox{80mm}{%
+      \textbf{\MakeUppercase{\orgname}}\newline{\small\MakeUppercase{#1}}}}
+  \chead{}
+  \rhead{\parbox{60mm}{{\small\hbox{}\hfill#2\newline\hbox{}\hfill#3}}}}
+%    \end{macrocode}
+% \end{macro}
+%    \begin{macrocode}
+%</package>
+%    \end{macrocode}
+%
+% \Finale
