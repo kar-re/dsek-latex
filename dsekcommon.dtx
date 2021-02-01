@@ -402,15 +402,20 @@
 %    \textsf{hyperref} $\ge$6.71v kan med optionen \texttt{pdfusetitle}
 %    automatiskt göra allt detta åt oss, men eftersom det den här
 %    koden redan var skriven, verkar fungera bra och ger oss lite extra
-%    kontroll så kvarstår detta tills vidare.
+%    kontroll så kvarstår detta tills vidare. 
+%    
+%    \textsf{pdfinfo} verkar inte fungera längre, så därför uppdaterades det till
+%    \textsf{hypersetup} vilket fungerar med hyperref. 
 %    \begin{macrocode}
     \AtBeginDocument{\makepdfinfo}
     \newcommand{\makepdfinfo}{%
       \pdfstringdef\pdf@title\@title
       \pdfstringdef\pdf@author\@author
-      \pdfinfo{/Title   (\pdf@title)
-               /Author  (\pdf@author)
-               /Creator (LaTeX 2e)}}
+      \hypersetup{
+          pdfinfo={Title={\pdf@title},
+                   Author={\pdf@author},
+                   Creator={LaTeX 2e},
+          }}}
 %    \end{macrocode}
 % \end{macro}
 %     Avsluta den if-sats som påbörjades med |\ifpdf|.
