@@ -22,6 +22,7 @@ jobs:
           name: PDF
           path: |
             *.pdf
+            *.cls
             *.sty
             *.eps
           
@@ -33,4 +34,5 @@ jobs:
           files: |
             *.pdf
             *.sty
+            *.cls
             *.eps
