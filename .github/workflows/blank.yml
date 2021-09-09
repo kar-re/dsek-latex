@@ -9,17 +9,17 @@ jobs:
     steps:
       - name: Set up Git repository
         uses: actions/checkout@v2
-        
-      - uses: xu-cheng/latex-action@v2
-        with:
-          root_file: "*.dtx"
-          glob_root_file: true
-        
+      
       - uses: xu-cheng/latex-action@v2
         with:
           root_file: "*.ins"
           glob_root_file: true
           
+      - uses: xu-cheng/latex-action@v2
+        with:
+          root_file: "*.dtx"
+          glob_root_file: true
+        
       - uses: actions/upload-artifact@v2
         with:
           name: PDF
