@@ -16,12 +16,6 @@ jobs:
           root_file: "*.ins"
           glob_root_file: true
           
-      - uses: xu-cheng/latex-action@v2
-        with:
-          compiler: "latexmk"
-          args: "-pdf -interaction=nonstopmode"
-          root_file: "*.dtx"
-          glob_root_file: true
         
       - uses: actions/upload-artifact@v2
         with:
